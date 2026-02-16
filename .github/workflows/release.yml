@@ -5,6 +5,9 @@ on:
     tags:
       - 'v*' 
   workflow_dispatch:
+  
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -37,6 +40,12 @@ jobs:
           keyPassword: ${{ secrets.KEY_PASSWORD }}
         env:
           BUILD_TOOLS_VERSION: "36.0.0"
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: CaptchAutofill-APK
+          path: ${{ steps.sign_app.outputs.signedReleaseFile }}
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
