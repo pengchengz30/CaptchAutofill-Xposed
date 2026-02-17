@@ -5,14 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="20dp"
+    android:padding="24dp"
     android:background="?attr/colorSurface">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="CaptchAutofill"
-        android:textSize="28sp"
+        android:textSize="32sp"
         android:textStyle="bold"
         android:textColor="?attr/colorOnSurface" />
 
@@ -20,28 +20,30 @@
         android:id="@+id/tv_version_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="Version Loading..."
         android:textColor="?attr/colorOutline"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        android:layout_marginTop="4dp" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="24dp"
         android:background="?attr/colorOutlineVariant" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="20dp"
-        android:background="?attr/colorSurfaceContainer">
+        android:padding="16dp"
+        android:background="@drawable/bg_search_box">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:text="Hide Launcher Icon"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:textColor="?attr/colorOnSurface" />
 
         <Switch
@@ -49,31 +51,83 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true" />
+            android:layout_centerVertical="true"
+
+            android:scaleX="1.25"
+            android:scaleY="1.25"
+
+            android:layout_marginEnd="8dp" />
     </RelativeLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_manage_apps"
+        style="@style/Widget.Material3.Button"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:layout_marginTop="18dp"
+        android:text="Select Whitelist Apps"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:cornerRadius="16dp"
+        app:icon="@android:drawable/ic_menu_add"
+        app:iconGravity="textStart"
+        app:iconPadding="12dp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/bg_status_pill"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="8dp"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:src="@android:drawable/ic_menu_agenda"
+            app:tint="?attr/colorOnSecondaryContainer" />
+
+        <TextView
+            android:id="@+id/tv_selected_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="0 apps selected"
+            android:textColor="?attr/colorOnSecondaryContainer"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginTop="32dp"
-        android:gravity="center_horizontal">
+        android:gravity="center_horizontal"
+        android:layout_marginBottom="16dp">
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_contact_author"
             style="@style/Widget.Material3.Button.TextButton.Icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Contact Author"
-            app:icon="@android:drawable/ic_menu_send" />
+            android:textColor="?attr/colorOutline"
+            app:icon="@android:drawable/ic_menu_send"
+            app:iconTint="?attr/colorOutline" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="GitHub: github.com/pengchengz30"
             android:textColor="?attr/colorOutline"
-            android:textSize="12sp"
-            android:layout_marginTop="4dp" />
+            android:textSize="11sp" />
     </LinearLayout>
 
 </LinearLayout>

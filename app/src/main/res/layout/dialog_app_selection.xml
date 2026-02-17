@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="App Whitelist"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="18dp"
+                android:text="Show System Apps"
+                android:textSize="14sp" />
+
+            <Switch
+                android:id="@+id/dialog_switch_system"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleX="1.2"
+                android:scaleY="1.2" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <EditText
+        android:id="@+id/et_search_app"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/bg_search_box"
+        android:drawableStart="@android:drawable/ic_menu_search"
+
+        android:drawablePadding="8dp"
+
+        android:drawableTint="?attr/colorOutline"
+        android:hint="Search app name or package..."
+
+        android:inputType="text"
+        android:maxLines="1"
+        android:padding="12dp"
+        android:textColor="?attr/colorOnSurface"
+        android:textColorHint="?attr/colorOutline"
+        android:textSize="14sp" />
+
+    <!--    <androidx.recyclerview.widget.RecyclerView-->
+    <!--        android:id="@+id/dialog_rv_apps"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="400dp" /> -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/dialog_rv_apps"
+        android:layout_width="match_parent"
+        android:layout_height="550dp"
+        android:layout_marginTop="8dp" />
+</LinearLayout>
