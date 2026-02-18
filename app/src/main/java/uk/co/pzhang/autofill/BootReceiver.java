@@ -13,8 +13,16 @@ public class BootReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
-            Log.i(AppId.INFO_TAG, "System Boot Completed. Syncing whitelist...");
+
+        String action = intent.getAction();
+
+        if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction()) || (AppId.PACKAGE_NAME + ".REQUEST_SYNC").equals(action)) {
+
+            if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
+                Log.i(AppId.INFO_TAG, "System Boot Completed. Syncing whitelist...");
+            } else {
+                Log.i(AppId.INFO_TAG, "REQUEST_SYNC Received!!!");
+            }
 
             SharedPreferences prefs = context.getSharedPreferences("config_apps", Context.MODE_PRIVATE);
             Set<String> whitelist = prefs.getStringSet("whitelist", new HashSet<>());
@@ -22,7 +30,7 @@ public class BootReceiver extends BroadcastReceiver {
             Intent syncIntent = new Intent(AppId.PACKAGE_NAME + ".CONFIG_UPDATED");
             syncIntent.putStringArrayListExtra("whitelist_data", new ArrayList<>(whitelist));
 
-            syncIntent.addFlags(0x01000000 | 0x10000000 | 0x00000020);
+            syncIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
 
             context.sendBroadcast(syncIntent);
             Log.d(AppId.DEBUG_TAG, "Boot sync sent: " + whitelist.size() + " apps.");

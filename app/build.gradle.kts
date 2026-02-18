@@ -29,6 +29,14 @@ android {
                 "proguard-rules.pro"
             )
         }
+        debug {
+            versionNameSuffix = "-debug"
+
+            isMinifyEnabled = false
+            isShrinkResources = false
+
+            isDebuggable = true
+        }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
