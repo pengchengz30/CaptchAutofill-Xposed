@@ -133,7 +133,7 @@ public class MainHook implements IXposedHookLoadPackage {
 
         Intent intent = new Intent(AppId.PACKAGE_NAME + ".REQUEST_SYNC");
         intent.setClassName(AppId.PACKAGE_NAME, AppId.PACKAGE_NAME + ".BootReceiver");
-        intent.addFlags(0x00000020 | Intent.FLAG_RECEIVER_FOREGROUND);
+        intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES | Intent.FLAG_RECEIVER_FOREGROUND);
 
         try {
             Class<?> userHandleClass = XposedHelpers.findClass("android.os.UserHandle", context.getClassLoader());

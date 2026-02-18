@@ -1,3 +1,5 @@
+import java.util.Base64
+
 plugins {
     alias(libs.plugins.android.application)
 }
@@ -22,19 +24,50 @@ android {
 
     signingConfigs {
         create("release") {
+            val explicitFilePath = System.getenv("KEYSTORE")
             val keyStoreBase64 = System.getenv("KEYSTORE_BASE64")
-            if (!keyStoreBase64.isNullOrEmpty()) {
-                storeFile = file(layout.buildDirectory.file("release.jks"))
-                storePassword = System.getenv("KEYSTORE_PASSWORD")
-                keyAlias = System.getenv("KEY_ALIAS")
-                keyPassword = System.getenv("KEY_PASSWORD")
+
+            val sPassword = System.getenv("KEYSTORE_PASSWORD")
+            val kAlias = System.getenv("KEY_ALIAS")
+            val kPassword = System.getenv("KEY_PASSWORD")
+
+            val keystoreFile = when {
+                !explicitFilePath.isNullOrEmpty() -> file(explicitFilePath)
+                !keyStoreBase64.isNullOrEmpty() -> file("/dev/shm/release.jks")
+                else -> null
+            }
+
+            if (keystoreFile != null && explicitFilePath.isNullOrEmpty() && !keystoreFile.exists() && !keyStoreBase64.isNullOrEmpty()) {
+                println("!!! Security: Restoring keystore to RAM (/dev/shm)...")
+                if (!keystoreFile.parentFile.exists()) keystoreFile.parentFile.mkdirs()
+                keystoreFile.writeBytes(Base64.getDecoder().decode(keyStoreBase64.trim()))
+                keystoreFile.deleteOnExit()
+            }
+
+            val isCredentialsPresent = !sPassword.isNullOrEmpty() && !kAlias.isNullOrEmpty() && !kPassword.isNullOrEmpty()
+            if (keystoreFile != null && keystoreFile.exists() && isCredentialsPresent) {
+                storeFile = keystoreFile
+                storePassword = sPassword
+                keyAlias = kAlias
+                keyPassword = kPassword
+                println("--> Signing: All credentials detected. Release signing configured.")
+            } else {
+                println("--- Signing: Missing keystore or environment variables. Skipping release signing... ---")
             }
         }
     }
 
     buildTypes {
         release {
-            signingConfig = signingConfigs.getByName("release")
+            val releaseSigning = signingConfigs.getByName("release")
+
+            if (releaseSigning.storeFile != null && releaseSigning.storeFile!!.exists()) {
+                signingConfig = releaseSigning
+            } else {
+                println("WARNING: Release signing skipped, APK will be UNSIGNED!")
+                signingConfig = null
+            }
+
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(

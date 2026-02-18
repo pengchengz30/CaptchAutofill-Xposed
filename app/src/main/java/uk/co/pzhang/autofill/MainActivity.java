@@ -43,9 +43,7 @@ public class MainActivity extends Activity {
 
         prefs = getSharedPreferences("config_apps", MODE_PRIVATE);
 
-        appAdapter = new AppAdapter(new ArrayList<>(), (pkg, isChecked) -> {
-            updateWhitelist(pkg, isChecked);
-        });
+        appAdapter = new AppAdapter(new ArrayList<>(), this::updateWhitelist);
 
         new Thread(() -> {
             loadApps();
@@ -85,9 +83,10 @@ public class MainActivity extends Activity {
         }
 
         Set<String> whitelist = new HashSet<>(prefs.getStringSet("whitelist", new HashSet<>()));
-        if (add) whitelist.add(pkg); else whitelist.remove(pkg);
+        if (add) whitelist.add(pkg);
+        else whitelist.remove(pkg);
 
-        prefs.edit().putStringSet("whitelist", whitelist).commit();
+        prefs.edit().putStringSet("whitelist", whitelist).apply();
 
         updateSelectedCount();
         notifyHookProcess();
@@ -100,7 +99,7 @@ public class MainActivity extends Activity {
         Intent intent = new Intent(AppId.PACKAGE_NAME + ".CONFIG_UPDATED");
         intent.putStringArrayListExtra("whitelist_data", dataToSend);
 
-        intent.addFlags(0x01000000 | 0x10000000 | 0x00000020);
+        intent.addFlags(Intent.FLAG_ACTIVITY_PREVIOUS_IS_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
 
         sendBroadcast(intent);
         Log.d(AppId.DEBUG_TAG, "Sent sync broadcast. Size: " + dataToSend.size());
@@ -149,8 +148,14 @@ public class MainActivity extends Activity {
                     currentSearchQuery = s.toString();
                     filterAndDisplayApps(isSystemShowing, currentSearchQuery);
                 }
-                @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-                @Override public void afterTextChanged(Editable s) {}
+
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                }
             });
         }
 
@@ -260,20 +265,28 @@ public class MainActivity extends Activity {
 
     private void toggleIcon(boolean show) {
         ComponentName cn = new ComponentName(this, getPackageName() + ".LauncherAlias");
-        getPackageManager().setComponentEnabledSetting(cn, show ? 1 : 2, 1);
+        getPackageManager().setComponentEnabledSetting(cn, show ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
         Toast.makeText(this, (show ? "Icon Visible" : "Icon Hidden"), Toast.LENGTH_SHORT).show();
     }
 
     private void openGitHub() {
-        try { startActivity(new Intent(Intent.ACTION_VIEW, android.net.Uri.parse("https://github.com/pengchengz30"))); } catch (Exception ignored) {}
+        try {
+            startActivity(new Intent(Intent.ACTION_VIEW, android.net.Uri.parse("https://github.com/pengchengz30")));
+        } catch (Exception ignored) {
+        }
     }
 
     public static class AppListItem {
         public String name, packageName;
         public android.graphics.drawable.Drawable icon;
         public boolean isSystem, isSelected;
+
         public AppListItem(String n, String p, android.graphics.drawable.Drawable i, boolean s, boolean sel) {
-            name = n; packageName = p; icon = i; isSystem = s; isSelected = sel;
+            name = n;
+            packageName = p;
+            icon = i;
+            isSystem = s;
+            isSelected = sel;
         }
     }
 

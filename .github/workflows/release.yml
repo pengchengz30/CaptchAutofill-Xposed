@@ -3,8 +3,8 @@ name: Android CI & Release
 on:
   push:
     tags:
-      - 'v*' 
-  workflow_dispatch: 
+      - 'v*'
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -26,13 +26,6 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      # Decode the Base64 keystore and place it in the app/build directory.
-      # This matches the 'layout.buildDirectory' path defined in build.gradle.kts.
-      - name: Decode Keystore
-        run: |
-          mkdir -p app/build
-          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > app/build/release.jks
-
       # Build APKs. Gradle will automatically sign the Release APK using the environment variables.
       - name: Build with Gradle
         run: ./gradlew assembleRelease assembleDebug
@@ -41,13 +34,15 @@ jobs:
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
           KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+          KEYSTORE: ""
 
       # Consolidate APKs into a single directory and rename them for clarity.
       - name: Prepare APKs for Release
         run: |
           mkdir -p release_artifacts
-          cp app/build/outputs/apk/debug/app-debug.apk release_artifacts/CaptchAutofill-${{ github.ref_name }}-Debug.apk
-          cp app/build/outputs/apk/release/app-release.apk release_artifacts/CaptchAutofill-${{ github.ref_name }}-Release.apk
+          REF_NAME="${{ github.ref_name }}"
+          cp app/build/outputs/apk/debug/app-debug.apk "release_artifacts/CaptchAutofill-${REF_NAME}-Debug.apk"
+          cp app/build/outputs/apk/release/app-release.apk "release_artifacts/CaptchAutofill-${REF_NAME}-Release.apk"
 
       # Upload the artifacts for internal use/storage.
       - name: Upload Artifact
@@ -58,6 +53,7 @@ jobs:
 
       # Create a new GitHub Release with the versioned APKs.
       - name: Create GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
           files: release_artifacts/*
