@@ -14,14 +14,27 @@ android {
         applicationId = "uk.co.pzhang.autofill"
         minSdk = 30
         targetSdk = 35
-        versionCode = 5
-        versionName = "2.0.0"
+        versionCode = 6
+        versionName = "2.1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        create("release") {
+            val keyStoreBase64 = System.getenv("KEYSTORE_BASE64")
+            if (!keyStoreBase64.isNullOrEmpty()) {
+                storeFile = file(layout.buildDirectory.file("release.jks"))
+                storePassword = System.getenv("KEYSTORE_PASSWORD")
+                keyAlias = System.getenv("KEY_ALIAS")
+                keyPassword = System.getenv("KEY_PASSWORD")
+            }
+        }
+    }
+
     buildTypes {
         release {
+            signingConfig = signingConfigs.getByName("release")
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(
