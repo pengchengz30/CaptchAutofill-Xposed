@@ -1,9 +1,10 @@
 # CaptchaAutofill
 
-[![Android CI & Release](https://github.com/pengchengz30/CaptchAutofill-Xposed/actions/workflows/release.yml/badge.svg)](https://github.com/pengchengz30/CaptchAutofill-Xposed/actions)
+[![Nightly Build](https://github.com/pengchengz30/CaptchAutofill-Xposed/actions/workflows/release.yml/badge.svg?branch=main)](https://github.com/pengchengz30/CaptchAutofill-Xposed/actions/workflows/release.yml)
+[![Latest Release](https://img.shields.io/github/v/release/pengchengz30/CaptchAutofill-Xposed?color=green&label=Release)](https://github.com/pengchengz30/CaptchAutofill-Xposed/releases)
 ![Platform](https://img.shields.io/badge/Platform-Android%2016%20(Baklava)-orange)
 ![API Level](https://img.shields.io/badge/API-36-blue)
-![License](https://img.shields.io/github/license/pengchengz30/CaptchAutofill-Xposed?color=blue)
+![License](https://img.shields.io/github/license/pengchengz30/CaptchAutofill-Xposed?style=flat&color=3498db)
 
 **CaptchaAutofill** is a high-performance LSPosed module designed to intercept system notifications and automatically extract verification codes. Specifically optimized for **Android 16 (Baklava)** and **Pixel 10 Pro** hardware, it focuses on architectural decoupling and reliability.
 
