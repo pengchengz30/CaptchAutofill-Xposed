@@ -4,6 +4,22 @@ plugins {
     alias(libs.plugins.android.application)
 }
 
+fun getGitTagName(): String {
+    return providers.exec {
+        commandLine("git", "describe", "--tags", "--always")
+    }.standardOutput.asText.map { it.trim().removePrefix("v") }.getOrElse("0.1.0")
+}
+
+fun getGitCommitCount(): Int {
+    return try {
+        providers.exec {
+            commandLine("git", "rev-list", "--count", "HEAD")
+        }.standardOutput.asText.map { it.trim().toInt() }.getOrElse(1)
+    } catch (e: Exception) {
+        1
+    }
+}
+
 android {
     namespace = "uk.co.pzhang.autofill"
     compileSdk {
@@ -16,10 +32,12 @@ android {
         applicationId = "uk.co.pzhang.autofill"
         minSdk = 30
         targetSdk = 35
-        versionCode = 6
-        versionName = "2.1.0"
+        versionCode = getGitCommitCount()
+        versionName = getGitTagName()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        println("--> Build Version: $versionName ($versionCode)")
     }
 
     signingConfigs {
