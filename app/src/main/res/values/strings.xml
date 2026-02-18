@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">Captcha Autofill</string>
+    <string name="app_name">CaptchAutofill</string>
         <string name="version_format">Version %1$s | Multilingual Support</string>
 </resources>

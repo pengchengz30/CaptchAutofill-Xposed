@@ -1,4 +1,4 @@
-# CaptchaAutofill
+# CaptchAutofill
 
 [![Nightly Build](https://github.com/pengchengz30/CaptchAutofill-Xposed/actions/workflows/release.yml/badge.svg?branch=main)](https://github.com/pengchengz30/CaptchAutofill-Xposed/actions/workflows/release.yml)
 [![Latest Release](https://img.shields.io/github/v/release/pengchengz30/CaptchAutofill-Xposed?color=green&label=Release)](https://github.com/pengchengz30/CaptchAutofill-Xposed/releases)
