@@ -24,7 +24,14 @@ public class MainHook implements IXposedHookLoadPackage {
 
 
     // --- Performance Optimization: Pre-compiled Patterns ---
-    private static final Pattern CODE_PATTERN = Pattern.compile("(?<![¥$￥£₩€.\\d#])\\b\\d{4,6}\\b(?!\\d|(\\.\\d+))");
+    // private static final Pattern CODE_PATTERN = Pattern.compile("(?<![¥$￥£₩€.\\d#])\\b\\d{4,6}\\b(?!\\d|(\\.\\d+))");
+    private static final Pattern CODE_PATTERN = Pattern.compile(
+        "(?<![¥$￥£₩€.\\d#])" +
+        "(?<![a-zA-Z])" +
+        "(\\d{4,6})" +
+        "(?!\\d|(\\.\\d+))" +
+        "(?![a-zA-Z])"
+    );
     private static final Pattern INTENT_PATTERN = Pattern.compile(".*(code|otp|verify|auth|验证|認証|인증|校验|确认|动态|密码|码|번호|コード).*");
     private static final Pattern NOISE_PATTERN = Pattern.compile(".*(ref|id|no|amount|bal|订单|编号|金额|余额|合计|リファレンス|金額|금액|번호).*");
     private static final Pattern COPULA_PATTERN = Pattern.compile(".*(\\b(is)\\b[:：]?\\s*$|(是|为|為|爲|は)[:：]?\\s*$|[:：]\\s*$)");
